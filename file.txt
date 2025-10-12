@@ -1,0 +1,14 @@
+arguments.sh
+case.sh
+conditionals.sh
+continue_break.sh
+errors.txt
+file.txt
+hola.sh
+hola.txt
+loop.sh
+output.sh
+stderror.sh
+stind.sh
+t.txt
+puto de mierda joder

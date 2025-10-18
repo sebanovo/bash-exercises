@@ -1,8 +1,7 @@
 #! /bin/bash
-
 # Calcular el factorial de un número n!
 function factorialIterativo() {
-  f=1
+  local f=1
   for(( i=1; i <= $1; i++ ))
   do
     f=$(( f * i ))
@@ -31,7 +30,7 @@ function factorialRecursivo() {
 
 # Calcular el fibonacci de un número fibonacci(n)
 function fibonacciIterativo() {
-  fibb=(0 1)
+  local fibb=(0 1)
   if (($1 == 1)) 
   then
     echo ${fibb[0]}
@@ -73,46 +72,28 @@ function fibonacciRecursivo() {
 #   echo "$i = $(fibonacciRecursivo $i)"
 # done
 
-
-# Ordenamiento burbuja
-function bubbleSort() {
-  local -n ref=$1
-  local n=${#ref[@]}
-  for (( i = 0; i < n - 1; i++ )); do
-    for (( j = 0; j < n - i - 1; j++ )); do
-      if (( ref[j] > ref[j+1] )); then
-        temp=${ref[j]}
-        ref[j]=${ref[j+1]}
-        ref[j+1]=$temp
-      fi
-    done
-  done
-}
-
-# ar=(5 4 3 2 1)
-# bubbleSort ar
-# echo ${ar[*]}
-
 # función para invertir un número
 function invertir() {
-  n=$1
-  result=0
+  local n=$1
+  local result=0
   while (( n > 0 )) 
   do
-    digit=$((n % 10))
+    local digit=$((n % 10))
     result=$((result * 10 + digit))
     n=$((n / 10))
   done
   echo $result
 }
 
+# echo $(invertir 12345)
+
 # función para sumar los digitos de un número
 function sumarDigitos() {
-  n=$1
-  suma=0
+  local n=$1
+  local suma=0
   while (( n > 0 ))
   do
-    digit=$((n % 10))
+    local digit=$((n % 10))
     suma=$((suma + digit))
     n=$((n / 10))
   done
@@ -123,11 +104,11 @@ function sumarDigitos() {
 
 # función para sumar los digitos pares de un número
 function sumarDigitosPares() {
-  n=$1
-  suma=0
+  local n=$1
+  local suma=0
   while (( n > 0 ))
   do
-    digit=$((n % 10))
+    local digit=$((n % 10))
     if (( digit % 2 == 0)) 
     then
       suma=$((suma + digit))
@@ -141,11 +122,11 @@ function sumarDigitosPares() {
 
 # función para sumar los digitos pares de un número
 function sumarDigitosImpares() {
-  n=$1
-  suma=0
+  local n=$1
+  local suma=0
   while (( n > 0 ))
   do
-    digit=$((n % 10))
+    local digit=$((n % 10))
     if (( digit % 2 != 0)) 
     then
       suma=$((suma + digit))
@@ -155,12 +136,14 @@ function sumarDigitosImpares() {
   echo $suma
 }
 
+# echo $(sumarDigitosImpares 12345) 
+
 function menorDigito() {
-  n=$1
-  menor=$(( n % 10))
+  local n=$1
+  local menor=$(( n % 10))
   while (( n > 0 ))
   do
-    actual=$((n % 10))
+    local actual=$((n % 10))
     if ((actual < menor))
     then
       menor=$actual
@@ -173,11 +156,11 @@ function menorDigito() {
 # echo $(menorDigito 12345)
 
 function mayorDigito() {
-  n=$1
-  mayor=$(( n % 10))
+  local n=$1
+  local mayor=$(( n % 10))
   while (( n > 0 ))
   do
-    actual=$((n % 10))
+    local actual=$((n % 10))
     if ((actual > mayor))
     then
       mayor=$actual
@@ -190,11 +173,11 @@ function mayorDigito() {
 # echo $(mayorDigito 12345)
 
 function eliminarDigitosPares() {
-  n=$1
-  result=0
+  local n=$1
+  local result=0
   while (( n > 0 ))
   do
-    digit=$((n % 10))
+    local digit=$((n % 10))
     if ((digit % 2 != 0))
     then
       result=$(( result * 10 + digit ))
@@ -207,11 +190,11 @@ function eliminarDigitosPares() {
 # echo $(eliminarDigitosPares 12345)
 
 function eliminarDigitosImpares() {
-  n=$1
-  result=0
+  local n=$1
+  local result=0
   while (( n > 0 ))
   do
-    digit=$((n % 10))
+    local digit=$((n % 10))
     if ((digit % 2 == 0))
     then
       result=$(( result * 10 + digit ))
@@ -223,14 +206,13 @@ function eliminarDigitosImpares() {
 
 # echo $(eliminarDigitosImpares 12345)
 
-
 function repetirNumero() {
-  n=$1 # numero
-  veces=$2 # veces
-  result=0
+  local n=$1 # numero
+  local veces=$2 # veces
+  local result=0
   while (( n > 0 ))
   do
-    digit=$(( n % 10 ))
+    local digit=$(( n % 10 ))
     for (( i=0; i < veces; i++ ))
     do
       result=$((result * 10 + digit))
@@ -242,3 +224,42 @@ function repetirNumero() {
 
 # echo $(repetirNumero 12345 3) # no aumentar mucho los digitos
 
+# ordenar un número por burbuja
+function burbujear()
+{
+  local -n x=$1
+  if ((x < 10))
+  then
+    return
+  fi 
+
+  local d=$(( x % 10 ))
+  x=$(( x / 10 ))
+  burbujear $1
+  if (( x % 10 <= d))
+  then
+    x=$(( x * 10 + d ))
+  else 
+    local z=$(( x % 10 ))
+    x=$(( x / 10 ))
+    x=$(( (x * 10 + d) * 10 + z))
+  fi
+}
+
+function bubbleSort()
+{
+  local -n x=$1
+  if (( x < 10 ))
+  then 
+    return
+  fi
+  burbujear $1
+  local ultimoDigito=$(( x % 10 ))
+  x=$(( x / 10 ))
+  bubbleSort $1
+  x=$(( x * 10 + ultimoDigito ))
+} 
+
+# num=57374271
+# bubbleSort num
+# echo $num
